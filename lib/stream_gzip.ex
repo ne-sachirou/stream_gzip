@@ -1,0 +1,67 @@
+defmodule StreamGzip do
+  @moduledoc """
+  """
+
+  @doc """
+  Gunzip the stream.
+
+      iex> [<<31, 139, 8, 0, 0, 0, 0, 0, 0, 3, 171, 168, 172, 170, 168, 172, 2, 0, 60, 143, 60, 178, 6, 0, 0, 0>>] |> StreamGzip.gunzip |> Enum.to_list
+      ["xyzxyz"]
+  """
+  @spec gunzip(Enumerable.t) :: Enumerable.t
+  def gunzip(enum) do
+    Stream.transform(
+      enum,
+      fn ->
+        z = :zlib.open
+        :zlib.inflateInit z, 16 + 15
+        z
+      end,
+      fn compressed, z -> {:zlib.inflate(z, compressed), z} end,
+      fn z ->
+        :zlib.inflateEnd z
+        :zlib.close z
+      end
+    )
+  end
+
+  @doc """
+  Gzip the stream.
+
+      iex> ["xyzxyz"] |> StreamGzip.gzip |> Enum.to_list
+      [<<31, 139, 8, 0, 0, 0, 0, 0, 0, 3, 171, 168, 172, 170, 168, 172, 2, 0, 60, 143, 60, 178, 6, 0, 0, 0>>]
+  """
+  @spec gzip(Enumerable.t) :: Enumerable.t
+  def gzip(enum) do
+    z = :zlib.open
+    :zlib.deflateInit z, :default, :deflated, 16 + 15, 8, :default
+    transform_with_final(
+      enum,
+      z,
+      &{:zlib.deflate(&2, &1), &2},
+      fn z ->
+        iolist = :zlib.deflate z, "", :finish
+        :zlib.deflateEnd z
+        :zlib.close z
+        {iolist, z}
+      end
+    )
+  end
+
+  @spec transform_with_final(Enumerable.t, acc, fun, final_fun) :: Enumerable.t when
+  fun: (Stream.element, acc -> {Enumerable.t, acc} | {:halt, acc}),
+  final_fun: (acc -> {Enumerable.t, acc} | {:halt, acc}),
+  acc: any
+  defp transform_with_final(enum, acc, reducer, final_fun) do
+    ref = make_ref()
+    enum
+    |> Stream.concat([ref])
+    |> Stream.transform(
+      acc,
+      fn
+        ^ref, acc -> final_fun.(acc)
+        element, acc -> reducer.(element, acc)
+      end
+    )
+  end
+end
