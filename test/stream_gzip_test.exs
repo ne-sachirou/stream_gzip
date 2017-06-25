@@ -9,7 +9,7 @@ defmodule StreamGzipTest do
       |> StreamHash.hash(:sha256)
       |> Enum.to_list
       actual = "test/fixture/sample.txt.gz"
-      |> File.stream!([:binary], 1)
+      |> File.stream!([:binary], 1024)
       |> StreamGzip.gunzip
       |> StreamHash.hash(:sha256)
       |> Enum.to_list

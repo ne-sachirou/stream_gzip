@@ -17,7 +17,18 @@ defmodule StreamGzip do
         :zlib.inflateInit z, 16 + 15
         z
       end,
-      fn compressed, z -> {:zlib.inflate(z, compressed), z} end,
+      fn compressed, z ->
+        enum = Stream.resource(
+          fn -> :zlib.inflateChunk z, compressed end,
+          fn
+            :halt -> {:halt, nil}
+            {:more, decompressed} -> {[decompressed], :zlib.inflateChunk(z)}
+            decompressed -> {[decompressed], :halt}
+          end,
+          &(&1)
+        )
+        {enum, z}
+      end,
       fn z ->
         :zlib.inflateEnd z
         :zlib.close z
