@@ -20,7 +20,7 @@ Gzip:
 "x"
 |> File.stream!
 |> StreamGzip.gzip
-|> Stream.into(File.stream "x.gz")
+|> Stream.into(File.stream! "x.gz")
 |> Stream.run
 ```
 
