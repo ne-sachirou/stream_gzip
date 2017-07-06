@@ -1,5 +1,6 @@
 defmodule StreamGzipTest do
   use ExUnit.Case, async: true
+
   doctest StreamGzip
 
   describe "gunzip/1" do

@@ -1,5 +1,6 @@
 defmodule StreamGzip do
   @moduledoc """
+  Gzip or gunzip a stream.
   """
 
   @doc """
