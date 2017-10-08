@@ -4,28 +4,25 @@ defmodule StreamGzip.Mixfile do
   def project do
     [
       app: :stream_gzip,
-      version: "0.1.0",
-      elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
-      description: "Gzip or gunzip a stream.",
-      package: package(),
-      aliases: aliases(),
       deps: deps(),
+      description: "Gzip or gunzip a stream.",
+      elixir: "~> 1.4",
+      package: package(),
+      start_permanent: Mix.env == :prod,
+      version: "0.1.1",
       # Docs
-      name: "StreamGzip",
-      source_url: "https://github.com/ne-sachirou/stream_gzip",
-      homepage_url: "https://github.com/ne-sachirou/stream_gzip",
       docs: [
-        main: "StreamGzip",
+        main: "readme",
         extras: ["README.md"],
       ],
+      homepage_url: "https://github.com/ne-sachirou/stream_gzip",
+      name: "StreamGzip",
+      source_url: "https://github.com/ne-sachirou/stream_gzip",
     ]
   end
 
-  def application do
-    [extra_applications: []]
-  end
+  def application, do: [extra_applications: []]
 
   defp deps do
     [
@@ -35,21 +32,15 @@ defmodule StreamGzip.Mixfile do
     ]
   end
 
-  defp aliases do
-    [
-      "lint": ["cotton.lint"],
-    ]
-  end
-
   defp package do
     [
+      files: ["LICENSE", "README.md", "mix.exs", "lib"],
       licenses: ["GPL-3.0"],
-      name: :stream_gzip,
-      maintainers: ["ne_Sachirou <utakata.c4se@gmail.com>"],
       links: %{
         "GitHub": "https://github.com/ne-sachirou/stream_gzip",
       },
-      files: ["LICENSE", "README.md", "mix.exs", "lib"]
+      maintainers: ["ne_Sachirou <utakata.c4se@gmail.com>"],
+      name: :stream_gzip,
     ]
   end
 end

@@ -30,6 +30,6 @@ Add `stream_gzip` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
-  [{:stream_gzip, "~> 0.1.0"}]
+  [{:stream_gzip, "~> 0.1.1"}]
 end
 ```
