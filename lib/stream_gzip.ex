@@ -46,9 +46,10 @@ defmodule StreamGzip do
       <<31, 139, 8, 0, 0, 0, 0, 0, 0, 3, 171, 168, 172, 170, 168, 172, 2, 0, 60, 143, 60, 178, 6, 0, 0, 0>>
   """
   @spec gzip(Enumerable.t) :: Enumerable.t
-  def gzip(enum) do
+  def gzip(enum), do: gzip enum, level: :default
+  def gzip(enum, opts) do
     z = :zlib.open
-    :zlib.deflateInit z, :default, :deflated, 16 + 15, 8, :default
+    :zlib.deflateInit z, opts[:level] || :default, :deflated, 16 + 15, 8, :default
     transform_with_final enum, z, &{:zlib.deflate(&2, &1), &2}, fn z ->
       iolist = :zlib.deflate z, "", :finish
       :zlib.deflateEnd z
