@@ -31,5 +31,19 @@ defmodule StreamGzipTest do
         |> Enum.to_list
       assert expected == actual
     end
+
+    test "deflateInit level option" do
+      expected = "test/fixture/sample.txt"
+        |> File.stream!
+        |> StreamGzip.gzip(level: :best_speed)
+        |> StreamGzip.gunzip
+        |> StreamHash.hash(:sha256)
+        |> Enum.to_list
+      actual = "test/fixture/sample.txt"
+        |> File.stream!
+        |> StreamHash.hash(:sha256)
+        |> Enum.to_list
+      assert expected == actual
+    end
   end
 end
