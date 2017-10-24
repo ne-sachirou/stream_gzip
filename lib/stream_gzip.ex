@@ -47,6 +47,7 @@ defmodule StreamGzip do
   """
   @spec gzip(Enumerable.t) :: Enumerable.t
   def gzip(enum), do: gzip enum, level: :default
+  @spec gzip(Enumerable.t, map) :: Enumerable.t
   def gzip(enum, opts) do
     z = :zlib.open
     :zlib.deflateInit z, opts[:level] || :default, :deflated, 16 + 15, 8, :default
