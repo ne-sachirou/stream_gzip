@@ -10,7 +10,7 @@ defmodule StreamGzip.Mixfile do
       elixir: "~> 1.4",
       package: package(),
       start_permanent: Mix.env == :prod,
-      version: "0.1.1",
+      version: "0.2.0",
       # Docs
       docs: [
         main: "readme",
