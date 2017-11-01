@@ -26,7 +26,7 @@ defmodule StreamGzip.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.17", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.18", only: :dev, runtime: false},
       {:inner_cotton, github: "ne-sachirou/inner_cotton", only: [:dev, :test]},
       {:stream_hash, "~> 0.1", only: :test},
     ]
