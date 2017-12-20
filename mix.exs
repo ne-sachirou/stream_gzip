@@ -9,8 +9,16 @@ defmodule StreamGzip.Mixfile do
       description: "Gzip or gunzip a stream.",
       elixir: "~> 1.4",
       package: package(),
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test,
+      ],
       start_permanent: Mix.env == :prod,
+      test_coverage: [tool: ExCoveralls],
       version: "0.2.0",
+
       # Docs
       docs: [
         main: "readme",

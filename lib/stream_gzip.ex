@@ -32,10 +32,7 @@ defmodule StreamGzip do
         )
         {enum, z}
       end,
-      fn z ->
-        :zlib.inflateEnd z
-        :zlib.close z
-      end
+      &:zlib.close/1
     )
   end
 

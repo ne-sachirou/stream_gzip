@@ -16,6 +16,16 @@ defmodule StreamGzipTest do
         |> Enum.to_list
       assert expected == actual
     end
+
+    test "raise" do
+      assert_raise RuntimeError, "Good", fn ->
+        "test/fixture/sample.txt.gz"
+        |> File.stream!([:binary], 1024)
+        |> StreamGzip.gunzip
+        |> Stream.map(fn _ -> raise "Good" end)
+        |> Stream.run
+      end
+    end
   end
 
   describe "gzip/1" do
@@ -46,4 +56,14 @@ defmodule StreamGzipTest do
       assert expected == actual
     end
   end
+
+    test "raise" do
+      assert_raise RuntimeError, "Good", fn ->
+        "test/fixture/sample.txt"
+        |> File.stream!
+        |> StreamGzip.gzip
+        |> Stream.map(fn _ -> raise "Good" end)
+        |> Stream.run
+      end
+    end
 end
