@@ -17,7 +17,12 @@ defmodule StreamGzipTest do
       assert expected == actual
     end
 
-    test "raise" do
+    test "Long chunked output" do
+      compressed = [:crypto.strong_rand_bytes(100000)] |> StreamGzip.gzip(level: :none) |> Enum.into("")
+      assert [compressed] |> StreamGzip.gunzip |> Enum.all?(&is_binary/1)
+    end
+
+    test "Raise the correct error" do
       assert_raise RuntimeError, "Good", fn ->
         "test/fixture/sample.txt.gz"
         |> File.stream!([:binary], 1024)
@@ -55,9 +60,11 @@ defmodule StreamGzipTest do
         |> Enum.to_list
       assert expected == actual
     end
-  end
 
-    test "raise" do
+    test "Long chunked output",
+      do: assert [:crypto.strong_rand_bytes(100000)] |> StreamGzip.gzip |> Enum.all?(&is_binary/1)
+
+    test "Raise the correct error" do
       assert_raise RuntimeError, "Good", fn ->
         "test/fixture/sample.txt"
         |> File.stream!
@@ -66,4 +73,5 @@ defmodule StreamGzipTest do
         |> Stream.run
       end
     end
+  end
 end

@@ -48,8 +48,8 @@ defmodule StreamGzip do
   def gzip(enum, opts) do
     z = :zlib.open
     :zlib.deflateInit z, (opts[:level] || :default), :deflated, 16 + 15, 8, :default
-    transform_with_final enum, z, &{:zlib.deflate(&2, &1), &2}, fn z ->
-      iolist = :zlib.deflate z, "", :finish
+    transform_with_final enum, z, &{:erlang.iolist_to_iovec(:zlib.deflate(&2, &1)), &2}, fn z ->
+      iolist = :erlang.iolist_to_iovec :zlib.deflate(z, "", :finish)
       :zlib.deflateEnd z
       :zlib.close z
       {iolist, z}
@@ -61,11 +61,11 @@ defmodule StreamGzip do
     final_fun: (acc -> {Enumerable.t, acc} | {:halt, acc}),
     acc: any
   defp transform_with_final(enum, acc, reducer, final_fun) do
-    ref = make_ref()
+    sentinel = make_ref()
     enum
-    |> Stream.concat([ref])
+    |> Stream.concat([sentinel])
     |> Stream.transform(acc, fn
-      ^ref, acc -> final_fun.(acc)
+      ^sentinel, acc -> final_fun.(acc)
       element, acc -> reducer.(element, acc)
     end)
   end
