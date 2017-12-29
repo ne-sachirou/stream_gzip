@@ -17,7 +17,7 @@ defmodule StreamGzip.Mixfile do
       ],
       start_permanent: Mix.env == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.2.1",
+      version: "0.2.2",
 
       # Docs
       docs: [

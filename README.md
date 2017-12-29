@@ -11,7 +11,7 @@ Gunzip:
 "x.gz"
 |> File.stream!
 |> StreamGzip.gunzip
-|> Enum.join
+|> Enum.into("")
 ```
 
 Gzip:
