@@ -4,7 +4,6 @@ defmodule StreamGzip do
   """
 
   defmacrop iolist_to_iovec(iolist) do
-    quote do: :erlang.iolist_to_iovec(unquote(iolist))
     :erlang.iolist_to_iovec([])
     quote do: :erlang.iolist_to_iovec(unquote(iolist))
   rescue
