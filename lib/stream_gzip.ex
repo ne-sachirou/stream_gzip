@@ -11,22 +11,30 @@ defmodule StreamGzip do
     UndefinedFunctionError -> quote do: List.flatten(unquote(iolist))
   end
 
-  defmacrop gunzip_loop(z) do
+  defmacrop gunzip_loop(compressed, z) do
     if function_exported?(:zlib, :safeInflate, 2) do
       quote do
-        fn
-          :halt -> {:halt, nil}
-          {:continue, decompressed} -> {List.wrap(decompressed), :zlib.safeInflate(unquote(z), [])}
-          {:finished, decompressed} -> {List.wrap(decompressed), :halt}
-        end
+	Stream.resource(
+          fn -> :zlib.safeInflate(unquote(z), unquote(compressed)) end,
+          fn
+            :halt -> {:halt, nil}
+            {:continue, decompressed} -> {List.wrap(decompressed), :zlib.safeInflate(unquote(z), [])}
+            {:finished, decompressed} -> {List.wrap(decompressed), :halt}
+          end,
+          & &1
+	)
       end
     else
       quote do
-	fn
-	  :halt -> {:halt, nil}
-	  {:more, decompressed} -> {List.wrap(decompressed), :zlib.inflateChunk(unquote(z))}
-	  decompressed -> {List.wrap(decompressed), :halt}
-	end
+	Stream.resource(
+	  fn -> :zlib.inflateChunk(unquote(z), unquote(compressed)) end,
+	  fn
+	    :halt -> {:halt, nil}
+	    {:more, decompressed} -> {List.wrap(decompressed), :zlib.inflateChunk(unquote(z))}
+	    decompressed -> {List.wrap(decompressed), :halt}
+	  end,
+          & &1
+	)
       end
     end
   end
@@ -48,15 +56,7 @@ defmodule StreamGzip do
         :zlib.inflateInit(z, 16 + 15)
         z
       end,
-      fn compressed, z ->
-        enum =
-          Stream.resource(
-            fn -> :zlib.safeInflate(z, compressed) end,
-	    gunzip_loop(z),
-            & &1
-          )
-        {enum, z}
-      end,
+      fn compressed, z -> {gunzip_loop(compressed, z), z} end,
       &:zlib.close/1
     )
   end
