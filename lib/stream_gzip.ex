@@ -4,10 +4,11 @@ defmodule StreamGzip do
   """
 
   defmacrop iolist_to_iovec(iolist) do
-    :erlang.iolist_to_iovec([])
-    quote do: :erlang.iolist_to_iovec(unquote(iolist))
-  rescue
-    UndefinedFunctionError -> quote do: List.flatten(unquote(iolist))
+    if function_exported? :erlang, :iolist_to_iovec, 1 do
+      quote do: :erlang.iolist_to_iovec(unquote(iolist))
+    else
+      quote do: List.flatten(unquote(iolist))
+    end
   end
 
   @doc """
