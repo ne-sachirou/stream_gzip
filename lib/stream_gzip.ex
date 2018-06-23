@@ -11,6 +11,34 @@ defmodule StreamGzip do
     end
   end
 
+  defmacrop gunzip_loop(compressed, z) do
+    if function_exported?(:zlib, :safeInflate, 2) do
+      quote do
+	Stream.resource(
+          fn -> :zlib.safeInflate(unquote(z), unquote(compressed)) end,
+          fn
+            :halt -> {:halt, nil}
+            {:continue, decompressed} -> {List.wrap(decompressed), :zlib.safeInflate(unquote(z), [])}
+            {:finished, decompressed} -> {List.wrap(decompressed), :halt}
+          end,
+          & &1
+	)
+      end
+    else
+      quote do
+	Stream.resource(
+	  fn -> :zlib.inflateChunk(unquote(z), unquote(compressed)) end,
+	  fn
+	    :halt -> {:halt, nil}
+	    {:more, decompressed} -> {List.wrap(decompressed), :zlib.inflateChunk(unquote(z))}
+	    decompressed -> {List.wrap(decompressed), :halt}
+	  end,
+          & &1
+	)
+      end
+    end
+  end
+
   @doc """
   Gunzip the stream.
 
@@ -28,20 +56,7 @@ defmodule StreamGzip do
         :zlib.inflateInit(z, 16 + 15)
         z
       end,
-      fn compressed, z ->
-        enum =
-          Stream.resource(
-            fn -> :zlib.inflateChunk(z, compressed) end,
-            fn
-              :halt -> {:halt, nil}
-              {:more, decompressed} -> {List.wrap(decompressed), :zlib.inflateChunk(z)}
-              decompressed -> {List.wrap(decompressed), :halt}
-            end,
-            & &1
-          )
-
-        {enum, z}
-      end,
+      fn compressed, z -> {gunzip_loop(compressed, z), z} end,
       &:zlib.close/1
     )
   end
