@@ -78,7 +78,9 @@ defmodule StreamGzipTest do
     test "Long chunked output",
       do:
         assert(
-          [:crypto.strong_rand_bytes(100_000)] |> StreamGzip.gzip() |> Enum.all?(&is_binary/1)
+          [:crypto.strong_rand_bytes(100_000)]
+          |> StreamGzip.gzip()
+          |> Enum.all?(&is_binary/1)
         )
 
     test "Raise the correct error" do
