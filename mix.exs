@@ -1,6 +1,8 @@
 defmodule StreamGzip.Mixfile do
   use Mix.Project
 
+  @github "https://github.com/ne-sachirou/stream_gzip"
+
   def project do
     [
       app: :stream_gzip,
@@ -21,12 +23,12 @@ defmodule StreamGzip.Mixfile do
 
       # Docs
       docs: [
-        main: "readme",
-        extras: ["README.md"]
+        extras: ["README.md"],
+        main: "readme"
       ],
-      homepage_url: "https://github.com/ne-sachirou/stream_gzip",
+      homepage_url: @github,
       name: "StreamGzip",
-      source_url: "https://github.com/ne-sachirou/stream_gzip"
+      source_url: @github
     ]
   end
 
@@ -43,10 +45,8 @@ defmodule StreamGzip.Mixfile do
   defp package do
     [
       files: ["LICENSE", "README.md", "mix.exs", "lib"],
-      licenses: ["GPL-3.0"],
-      links: %{
-        GitHub: "https://github.com/ne-sachirou/stream_gzip"
-      },
+      licenses: ["GPL-3.0-or-later"],
+      links: %{GitHub: @github},
       maintainers: ["ne_Sachirou <utakata.c4se@gmail.com>"],
       name: :stream_gzip
     ]

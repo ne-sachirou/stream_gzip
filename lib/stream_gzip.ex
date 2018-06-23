@@ -4,7 +4,7 @@ defmodule StreamGzip do
   """
 
   defmacrop iolist_to_iovec(iolist) do
-    if function_exported? :erlang, :iolist_to_iovec, 1 do
+    if function_exported?(:erlang, :iolist_to_iovec, 1) do
       quote do: :erlang.iolist_to_iovec(unquote(iolist))
     else
       quote do: List.flatten(unquote(iolist))
