@@ -3,14 +3,6 @@ defmodule StreamGzip do
   Gzip or gunzip a stream.
   """
 
-  defmacrop iolist_to_iovec(iolist) do
-    if function_exported?(:erlang, :iolist_to_iovec, 1) do
-      quote do: :erlang.iolist_to_iovec(unquote(iolist))
-    else
-      quote do: List.flatten(unquote(iolist))
-    end
-  end
-
   @doc """
   Gunzip the stream.
 
@@ -61,8 +53,8 @@ defmodule StreamGzip do
     z = :zlib.open()
     :zlib.deflateInit(z, opts[:level] || :default, :deflated, 16 + 15, 8, :default)
 
-    transform_with_final(enum, z, &{iolist_to_iovec(:zlib.deflate(&2, &1)), &2}, fn z ->
-      iolist = iolist_to_iovec(:zlib.deflate(z, "", :finish))
+    transform_with_final(enum, z, &{:erlang.iolist_to_iovec(:zlib.deflate(&2, &1)), &2}, fn z ->
+      iolist = :erlang.iolist_to_iovec(:zlib.deflate(z, "", :finish))
       :zlib.deflateEnd(z)
       :zlib.close(z)
       {iolist, z}
