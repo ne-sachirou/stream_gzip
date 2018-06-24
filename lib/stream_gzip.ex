@@ -23,15 +23,14 @@ defmodule StreamGzip do
       fn compressed, z ->
         enum =
           Stream.resource(
-            fn -> :zlib.inflateChunk(z, compressed) end,
+            fn -> :zlib.safeInflate(z, compressed) end,
             fn
               :halt -> {:halt, nil}
-              {:more, decompressed} -> {List.wrap(decompressed), :zlib.inflateChunk(z)}
-              decompressed -> {List.wrap(decompressed), :halt}
+              {:continue, decompressed} -> {List.wrap(decompressed), :zlib.safeInflate(z, [])}
+              {:finished, decompressed} -> {List.wrap(decompressed), :halt}
             end,
             & &1
           )
-
         {enum, z}
       end,
       &:zlib.close/1
