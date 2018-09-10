@@ -31,6 +31,7 @@ defmodule StreamGzip do
             end,
             & &1
           )
+
         {enum, z}
       end,
       &:zlib.close/1

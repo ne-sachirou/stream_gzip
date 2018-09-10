@@ -9,7 +9,11 @@ defmodule StreamGzip.Mixfile do
       build_embedded: Mix.env() == :prod,
       deps: deps(),
       description: "Gzip or gunzip a stream.",
-      elixir: "~> 1.5",
+      dialyzer: [
+        flags: [:no_undefined_callbacks],
+        remove_defaults: [:unknown]
+      ],
+      elixir: "~> 1.6",
       package: package(),
       preferred_cli_env: [
         coveralls: :test,
@@ -19,7 +23,7 @@ defmodule StreamGzip.Mixfile do
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.2.4",
+      version: "0.3.1",
 
       # Docs
       docs: [
