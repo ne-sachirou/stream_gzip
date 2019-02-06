@@ -1,9 +1,11 @@
 language: elixir
+elixir: 
+  - "1.7"
+  - "1.8"
 matrix: 
   exclude: []
-elixir: 
-  - "1.6"
-  - "1.7"
 otp_release: 
   - "20.3"
-  - "21.1"
+  - "21.2"
+script: 
+  - "mix coveralls.travis"

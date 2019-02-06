@@ -4,6 +4,7 @@ Gzip or gunzip a stream.
 
 [![Hex.pm](https://img.shields.io/hexpm/v/stream_gzip.svg)](https://hex.pm/packages/stream_gzip)
 [![Build Status](https://travis-ci.org/ne-sachirou/stream_gzip.svg?branch=master)](https://travis-ci.org/ne-sachirou/stream_gzip)
+[![Coverage Status](https://coveralls.io/repos/github/ne-sachirou/stream_gzip/badge.svg)](https://coveralls.io/github/ne-sachirou/stream_gzip)
 
 Gunzip:
 
