@@ -1,0 +1,36 @@
+---
+name: test
+
+"on": push
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        elixir: ['1.9.x', '1.10.x']
+        erlang: ['21.x', '22.x']
+        os: [ubuntu-latest]
+    name: test
+    steps:
+      - uses: actions/setup-elixir@v1.2.0
+        with:
+          elixir-version: ${{ matrix.elixir }}
+          otp-version: ${{ matrix.erlang }}
+      - uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: _build
+          key: ${{ matrix.elixir }}_erl${{ matrix.erlang }}-build
+      - uses: actions/cache@v1
+        with:
+          path: deps
+          key: ${{ matrix.elixir }}_erl${{ matrix.erlang }}-deps
+      - name: Lint & test
+        run: |
+          mix "do" local.hex --force, local.rebar --force
+          mix "do" deps.get, cotton.lint
+          mix coveralls.github

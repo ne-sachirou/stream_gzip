@@ -18,13 +18,12 @@ defmodule StreamGzip.Mixfile do
       preferred_cli_env: [
         coveralls: :test,
         "coveralls.detail": :test,
-        "coveralls.post": :test,
-        "coveralls.travis": :test,
+        "coveralls.github": :test,
         "coveralls.html": :test
       ],
       start_permanent: Mix.env() == :prod,
       test_coverage: [tool: ExCoveralls],
-      version: "0.4.0",
+      version: "0.4.1",
 
       # Docs
       docs: [
