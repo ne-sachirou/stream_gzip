@@ -110,8 +110,7 @@
         {Credo.Check.Readability.StringSigils, []},
         {Credo.Check.Readability.TrailingBlankLine, []},
         {Credo.Check.Readability.TrailingWhiteSpace, []},
-        # TODO: enable by default in Credo 1.1
-        {Credo.Check.Readability.UnnecessaryAliasExpansion, false},
+        {Credo.Check.Readability.UnnecessaryAliasExpansion, []},
         {Credo.Check.Readability.VariableNames, []},
 
         #
@@ -149,6 +148,7 @@
         {Credo.Check.Warning.UnusedRegexOperation, []},
         {Credo.Check.Warning.UnusedStringOperation, []},
         {Credo.Check.Warning.UnusedTupleOperation, []},
+        {Credo.Check.Warning.UnsafeExec, []},
 
         #
         # Checks scheduled for next check update (opt-in for now, just replace `false` with `[]`)
@@ -156,6 +156,7 @@
         #
         # Controversial and experimental checks (opt-in, just replace `false` with `[]`)
         #
+        {Credo.Check.Readability.StrictModuleLayout, false},
         {Credo.Check.Consistency.MultiAliasImportRequireUse, false},
         {Credo.Check.Consistency.UnusedVariableNames, false},
         {Credo.Check.Design.DuplicatedCode, false},
@@ -163,6 +164,7 @@
         {Credo.Check.Readability.MultiAlias, false},
         {Credo.Check.Readability.Specs, false},
         {Credo.Check.Readability.SinglePipe, false},
+        {Credo.Check.Readability.WithCustomTaggedTuple, false},
         {Credo.Check.Refactor.ABCSize, false},
         {Credo.Check.Refactor.AppendSingleItem, false},
         {Credo.Check.Refactor.DoubleBooleanNegation, false},
@@ -170,6 +172,7 @@
         {Credo.Check.Refactor.NegatedIsNil, false},
         {Credo.Check.Refactor.PipeChainStart, false},
         {Credo.Check.Refactor.VariableRebinding, false},
+        {Credo.Check.Warning.LeakyEnvironment, false},
         {Credo.Check.Warning.MapGetUnsafePass, false},
         {Credo.Check.Warning.UnsafeToAtom, false}
 
