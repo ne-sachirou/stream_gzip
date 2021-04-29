@@ -1,0 +1,19 @@
+version: 2
+updates:
+- package-ecosystem: mix
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "10:00"
+    timezone: Asia/Tokyo
+  open-pull-requests-limit: 10
+  reviewers:
+  - ne-sachirou
+  assignees:
+  - ne-sachirou
+  ignore:
+  - dependency-name: ex_doc
+    versions:
+    - 0.23.0
+    - 0.24.0
+    - 0.24.1
