@@ -1,42 +1,40 @@
 ---
 name: test
 
-'on': [pull_request, push]
+"on":
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        elixir: ['1.10.x', '1.11.x']
-        erlang: ['22.x', '23.x']
+        elixir: ["1.11.x", "1.12.x"]
+        erlang: ["23.x", "24.x"]
         os: [ubuntu-latest]
-    name: test
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/setup-elixir@v1
+      - uses: erlef/setup-beam@v1
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.erlang }}
       - uses: actions/checkout@v2
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
-          path: _build
-          key: build-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-${{ github.sha }}
+          path: |
+            _build
+            deps
+          key: ${{ runner.os }}-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
           restore-keys: |
-            build-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-
-            build-erl${{ matrix.erlang }}-
-      - uses: actions/cache@v1
-        with:
-          path: deps
-          key: deps-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-${{ hashFiles('mix.lock') }}
-          restore-keys: |
-            deps-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-
-            deps-erl${{ matrix.erlang }}-
+            ${{ runner.os }}-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-
+            ${{ runner.os }}-erl${{ matrix.erlang }}-
       - name: Lint & test
         run: |
-          mix "do" local.hex --force, local.rebar --force
           mix "do" deps.get, deps.clean --unused, cotton.lint
           mix coveralls.github
