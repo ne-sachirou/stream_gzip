@@ -15,16 +15,16 @@ jobs:
   test:
     strategy:
       matrix:
-        elixir: ["1.11.x", "1.12.x"]
+        elixir: ["1.12.x", "1.13.x"]
         erlang: ["23.x", "24.x"]
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     steps:
+      - uses: actions/checkout@v2
       - uses: erlef/setup-beam@v1
         with:
           elixir-version: ${{ matrix.elixir }}
           otp-version: ${{ matrix.erlang }}
-      - uses: actions/checkout@v2
       - uses: actions/cache@v2
         with:
           path: |
@@ -34,7 +34,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-erl${{ matrix.erlang }}-ex${{ matrix.elixir }}-
             ${{ runner.os }}-erl${{ matrix.erlang }}-
+      - name: Install Elixir dependencies
+        run: mix "do" deps.get, deps.clean --unused
       - name: Lint & test
         run: |
-          mix "do" deps.get, deps.clean --unused, cotton.lint
+          mix cotton.lint
           mix coveralls.github
