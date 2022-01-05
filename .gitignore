@@ -24,3 +24,5 @@ stream_gzip-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+/docs

@@ -2,7 +2,7 @@ defmodule StreamGzip.Mixfile do
   use Mix.Project
 
   @source_url "https://github.com/ne-sachirou/stream_gzip"
-  @version "0.4.1"
+  @version "0.4.2"
 
   def project do
     [
@@ -48,7 +48,7 @@ defmodule StreamGzip.Mixfile do
       files: ["LICENSE", "README.md", "mix.exs", "lib"],
       licenses: ["GPL-3.0-or-later"],
       maintainers: ["ne_Sachirou <utakata.c4se@gmail.com>"],
-      links: %{GitHub: @source_url},
+      links: %{GitHub: @source_url}
     ]
   end
 

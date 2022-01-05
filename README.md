@@ -2,7 +2,7 @@
 
 [![Actions Status](https://github.com/ne-sachirou/stream_gzip/workflows/test/badge.svg)](https://github.com/ne-sachirou/stream_gzip/actions)
 [![Coverage Status](https://coveralls.io/repos/github/ne-sachirou/stream_gzip/badge.svg)](https://coveralls.io/github/ne-sachirou/stream_gzip)
-[![Module Version](https://img.shields.io/hexpm/v/stream_gzip.svg)](https://hex.pm/packages/stream_gzip)
+[![Hex.pm](https://img.shields.io/hexpm/v/stream_gzip.svg)](https://hex.pm/packages/stream_gzip)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-lightgreen.svg)](https://hexdocs.pm/stream_gzip/)
 [![Total Download](https://img.shields.io/hexpm/dt/stream_gzip.svg)](https://hex.pm/packages/stream_gzip)
 [![License](https://img.shields.io/hexpm/l/stream_gzip.svg)](https://github.com/ne-sachirou/stream_gzip/blob/master/LICENSE)
