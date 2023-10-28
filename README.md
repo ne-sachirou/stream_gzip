@@ -28,7 +28,7 @@ Gunzip:
 
 ```elixir
 "x.gz"
-|> File.stream!
+|> File.stream!([:binary], 1024)
 |> StreamGzip.gunzip
 |> Enum.into("")
 ```
